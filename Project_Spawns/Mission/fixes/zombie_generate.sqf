@@ -35,7 +35,7 @@ _agent setPosATL [_pos select 0, _pos select 1, 0];
 
 _agent setVariable ["myDest",_myDest];
 _agent setVariable ["newDest",_newDest];
-_agent setVariable ["originLoc",_loc];
+_agent setVariable ["originLoc",_locTxt];
 
 //Add some loot
 _rnd = random 1;
