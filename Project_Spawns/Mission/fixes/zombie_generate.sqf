@@ -19,7 +19,7 @@ _type = _unitTypes call BIS_fnc_selectRandom;
 if (isNil "_radius") then {
 	_radius = 200;
 };
-
+_method = "CAN_COLLIDE";
 _agent = createAgent [_type, _position, [], _radius, _method];
 diag_log format ["MMMYUM: ZEDSYSTEM: zombie_generate SUCCESS! | PositionAgent = %1",_position];
 
