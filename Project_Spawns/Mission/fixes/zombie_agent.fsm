@@ -56,13 +56,15 @@ item51[] = {"Sleep_Loop",2,250,475.000000,375.000000,575.000000,425.000000,0.000
 item52[] = {"",7,210,-554.000000,671.000000,-546.000000,679.000000,0.000000,""};
 item53[] = {"Can_Wake",4,218,475.000000,525.000000,575.000000,575.000000,0.000000,"Can" \n "Wake"};
 item54[] = {"",7,210,-553.999939,146.000031,-546.000000,153.999985,0.000000,""};
-item55[] = {"Time_Check",4,218,600.000000,375.000000,700.000000,425.000000,0.000000,"Time" \n "Check"};
-item56[] = {"Kill",4,218,475.000000,275.000000,575.000000,325.000000,4.000000,"Kill"};
+item55[] = {"Time_Check",4,218,375.000000,450.000000,475.000000,500.000000,0.000000,"Time" \n "Check"};
+item56[] = {"Noone_around",4,218,650.000000,375.000000,750.000000,425.000000,4.000000,"Noone" \n "around"};
 item57[] = {"Wake_Up",2,250,475.000000,650.000000,575.000000,700.000000,0.000000,"Wake" \n "Up"};
-item58[] = {"true",8,218,300.000000,650.000000,400.000000,700.000000,0.000000,"true"};
+item58[] = {"true",8,218,225.000000,650.000000,325.000000,700.000000,0.000000,"true"};
 item59[] = {"Start_Sleep",2,250,175.000000,375.000000,275.000000,425.000000,0.000000,"Start" \n "Sleep"};
 item60[] = {"true",8,218,325.000000,375.000000,425.000000,425.000000,0.000000,"true"};
-item61[] = {"",7,210,346.000000,296.000000,354.000000,304.000000,0.000000,""};
+item61[] = {"Move_Closer",2,4346,650.000000,725.000000,750.000000,775.000000,0.000000,"Move" \n "Closer"};
+item62[] = {"",7,210,45.999958,670.999939,54.000042,679.000061,0.000000,""};
+item63[] = {"relocate",4,218,0.000000,725.000000,100.000000,775.000000,4.000000,"relocate"};
 link0[] = {0,11};
 link1[] = {0,49};
 link2[] = {2,3};
@@ -137,12 +139,14 @@ link70[] = {54,24};
 link71[] = {55,51};
 link72[] = {56,61};
 link73[] = {57,58};
-link74[] = {58,52};
+link74[] = {58,62};
 link75[] = {59,60};
 link76[] = {60,51};
-link77[] = {61,34};
-globals[] = {25.000000,1,0,0,0,640,480,1,139,6316128,1,-588.709839,70.975464,826.429260,82.860497,755,851,1};
-window[] = {0,-1,-1,-1,-1,1121,125,1595,125,1,773};
+link77[] = {61,63};
+link78[] = {62,52};
+link79[] = {63,62};
+globals[] = {25.000000,1,0,0,0,640,480,1,147,6316128,1,22.047760,855.922302,1226.402832,196.464584,689,851,1};
+window[] = {0,-1,-1,-1,-1,1246,250,1720,250,1,707};
 *//*%FSM</HEAD>*/
 class FSM
 {
@@ -164,7 +168,7 @@ class FSM
        "_agent setVariable [""asleep"",false,true];" \n
        "" \n
        "_walkSpeed = (random 3) max 1;" \n
-       "_runSpeed = (random 4) max 2;" \n
+       "_runSpeed = (random 5) max 3;" \n
        "" \n
        "_secondHand = false;" \n
        "" \n
@@ -202,26 +206,11 @@ class FSM
     {
       name = "End";
       init = /*%FSM<STATEINIT""">*/"if (!isDedicated) then {" \n
-       "" \n
-       "if (alive _agent) then {" \n
-       "	/*" \n
-       "	_city = _agent getVariable ""originLoc"";" \n
-       "	_tempZedNum = _city getVariable [""numZombies"", 0];" \n
+       "	dayz_spawnZombies = dayz_spawnZombies - 1;" \n
        "	" \n
-       "	if (!(isNil ""_tempZedNum"")) then {" \n
-       "	//	_mBuilding setVariable [""numZombies"", _tempZedNum + 1, true];" \n
-       "		_city setVariable [""numZombies"", _tempZedNum + 1, true];" \n
+       "	if (!isNull _agent) then {" \n
+       "		deleteVehicle _agent;" \n
        "	};" \n
-       "	*/" \n
-       "	player_pendingSleepers = player_pendingSleepers + 1;" \n
-       "};" \n
-       "" \n
-       "dayz_spawnZombies = dayz_spawnZombies - 1;" \n
-       "" \n
-       "if (!isNull _agent) then {" \n
-       "	deleteVehicle _agent;" \n
-       "};" \n
-       "" \n
        "} else {" \n
        "	[_agent] call zombie_findOwner;" \n
        "};"/*%FSM</STATEINIT""">*/;
@@ -238,7 +227,7 @@ class FSM
       init = /*%FSM<STATEINIT""">*/"_isAlive = alive _agent;" \n
        "_target = _agent call zombie_findTargetAgent;" \n
        "if (time - _entityTime > 20) then {" \n
-       "	_isSomeone = ({(isPlayer _x) and (alive _x) and (_agent distance _x < 200)} count playableUnits) > 0;" \n
+       "	_isSomeone = ({(isPlayer _x) and (alive _x) and (_agent distance _x < 300)} count playableUnits) > 0;" \n
        "	_entityTime = time;" \n
        "};" \n
        "" \n
@@ -325,7 +314,7 @@ class FSM
       init = /*%FSM<STATEINIT""">*/"_isAlive = alive _agent;" \n
        "_target = _agent call zombie_findTargetAgent;" \n
        "if (time - _entityTime > 20) then {" \n
-       "	_isSomeone = ({(isPlayer _x) and (alive _x) and (_agent distance _x < 200)} count playableUnits) > 0;" \n
+       "	_isSomeone = ({(isPlayer _x) and (alive _x) and (_agent distance _x < 300)} count playableUnits) > 0;" \n
        "	_entityTime = time;" \n
        "};" \n
        "" \n
@@ -496,7 +485,7 @@ class FSM
       init = /*%FSM<STATEINIT""">*/"_timeN = time;" \n
        "_isAlive = alive _agent;" \n
        "if (time - _entityTime > 20) then {" \n
-       "	_isSomeone = ({(isPlayer _x) and (alive _x) and (_agent distance _x < 200)} count playableUnits) > 0;" \n
+       "	_isSomeone = ({(isPlayer _x) and (alive _x) and (_agent distance _x < 300)} count playableUnits) > 0;" \n
        "	_entityTime = time;" \n
        "};" \n
        "" \n
@@ -564,7 +553,7 @@ class FSM
           priority = 0.000000;
           to="Chase";
           precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
-          condition=/*%FSM<CONDITION""">*/"(time - _timeN) > 0.6"/*%FSM</CONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/"(time - _timeN) > 1"/*%FSM</CONDITION""">*/;
           action=/*%FSM<ACTION""">*/"_losCheck = _losCheck + 1;" \n
            "" \n
            "_targetPos = getPosATL _target;" \n
@@ -734,16 +723,14 @@ class FSM
       precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
       class Links
       {
-        /*%FSM<LINK "Kill">*/
-        class Kill
+        /*%FSM<LINK "Noone_around">*/
+        class Noone_around
         {
           priority = 4.000000;
-          to="wait";
+          to="Move_Closer";
           precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
-          condition=/*%FSM<CONDITION""">*/"((time - _sleepStart) > 30) or (sleepingZeds > 200)"/*%FSM</CONDITION""">*/;
-          action=/*%FSM<ACTION""">*/"sleepingZeds = sleepingZeds - 1;" \n
-           "_waitStart = time;" \n
-           "cutText [format [(""killing sleeper, left: %1""), sleepingZeds], ""PLAIN DOWN""];"/*%FSM</ACTION""">*/;
+          condition=/*%FSM<CONDITION""">*/"((time - _sleepStart) > 30) and ((dayz_spawnZombies - sleepingZeds) < dayz_maxLocalZombies)"/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
         };
         /*%FSM</LINK>*/
         /*%FSM<LINK "Time_Check">*/
@@ -762,7 +749,7 @@ class FSM
           priority = 0.000000;
           to="Wake_Up";
           precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
-          condition=/*%FSM<CONDITION""">*/"_isSomeone and ((dayz_spawnZombies - sleepingZeds) < dayz_maxLocalZombies)"/*%FSM</CONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/"((time - _sleepStart) > 20) and _isSomeone and ((dayz_spawnZombies - sleepingZeds) < dayz_maxLocalZombies)"/*%FSM</CONDITION""">*/;
           action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
         };
         /*%FSM</LINK>*/
@@ -775,20 +762,13 @@ class FSM
       name = "Wake_Up";
       init = /*%FSM<STATEINIT""">*/"sleepingZeds = sleepingZeds - 1;" \n
        "" \n
-       "//_agent enableAI ""TARGET"";" \n
-       "//_agent enableAI ""AUTOTARGET""; " \n
+       "_agent enableAI ""MOVE"";" \n
        "_agent enableAI ""ANIM"";" \n
        "" \n
-       "//_agent hideObject false;" \n
-       "//_id1 = [nil, _agent, ""per"", rHideObject, true] call RE;" \n
-       "" \n
        "_agent enableSimulation true;" \n
-       "" \n
        "_agent setPosATL [(getPosAtL _agent) select 0, (getPosAtL _agent) select 1,0];" \n
        "" \n
-       "cutText [format [(""Zed leaving sleep state... NumSleeping = %1""), sleepingZeds], ""PLAIN DOWN""];" \n
-       "" \n
-       "_agent setVariable [""asleep"",false,true];" \n
+       "//cutText [format [(""Zed leaving sleep state... NumSleeping = %1""), sleepingZeds], ""PLAIN DOWN""];" \n
        "" \n
        "_agent switchMove """";"/*%FSM</STATEINIT""">*/;
       precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
@@ -813,22 +793,14 @@ class FSM
       name = "Start_Sleep";
       init = /*%FSM<STATEINIT""">*/"_sleepStart = time;" \n
        "" \n
-       "_agent setVariable [""asleep"",true,true];" \n
-       "" \n
        "sleepingZeds = sleepingZeds + 1;" \n
-       "cutText [format [(""Zed entering sleep state... NumSleeping = %1""), sleepingZeds], ""PLAIN DOWN""];" \n
+       "//cutText [format [(""Zed entering sleep state... NumSleeping = %1""), sleepingZeds], ""PLAIN DOWN""];" \n
        "" \n
-       "//_target = objnull;" \n
-       "//_agent forceSpeed 0;" \n
-       "" \n
-       "//_agent disableAI ""TARGET"";" \n
-       "//_agent disableAI ""AUTOTARGET"";" \n
        "_agent disableAI ""ANIM"";" \n
+       "_agent disableAI ""MOVE"";" \n
        "" \n
-       "//_id1 = [nil, _agent, ""per"", rHideObject, true] call RE;" \n
        "_agent switchMove ""AmovPpneMstpSnonWnonDnon_healed"";" \n
        "" \n
-       "//_agent hideObject true;" \n
        "_agent enableSimulation false;" \n
        "" \n
        "_agent setPosATL [(getPosAtL _agent) select 0, (getPosAtL _agent) select 1,((getPosAtL _agent) select 2) - 20];" \n
@@ -844,6 +816,38 @@ class FSM
           precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
           condition=/*%FSM<CONDITION""">*/"true"/*%FSM</CONDITION""">*/;
           action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+        };
+        /*%FSM</LINK>*/
+      };
+    };
+    /*%FSM</STATE>*/
+    /*%FSM<STATE "Move_Closer">*/
+    class Move_Closer
+    {
+      name = "Move_Closer";
+      init = /*%FSM<STATEINIT""">*/"_sleepStart = time;" \n
+       "_agent execVM ""fixes\zombie_MoveCloser.sqf"";"/*%FSM</STATEINIT""">*/;
+      precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+      class Links
+      {
+        /*%FSM<LINK "relocate">*/
+        class relocate
+        {
+          priority = 4.000000;
+          to="Loiter";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/"(time - _sleepStart > 10)"/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/"sleepingZeds = sleepingZeds - 1;" \n
+           "" \n
+           "_agent enableSimulation true;" \n
+           "_agent enableAI ""MOVE"";" \n
+           "_agent enableAI ""ANIM"";" \n
+           "" \n
+           "cutText [format [(""Zed being moved closer... NumSleeping = %1""), sleepingZeds], ""PLAIN DOWN""];" \n
+           "" \n
+           "[_agent,(getPosATL _agent)] call zombie_loiter;" \n
+           "" \n
+           "_agent switchMove """";"/*%FSM</ACTION""">*/;
         };
         /*%FSM</LINK>*/
       };

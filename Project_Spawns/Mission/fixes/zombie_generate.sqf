@@ -1,13 +1,10 @@
 private ["_position","_unitTypes","_isNoone","_loot","_agent","_type","_radius","_method","_myDest","_newDest","_id","_rnd","_loc"];
-_position =    _this select 0;
-//_doLoiter = 	_this select 1;
-_loc 	  = 	_this select 1;
 
-_radius = 500; // get radius passed here when that is set up
-//_unitTypes = 	_this select 2;
-_isNoone =    {isPlayer _x} count (_position nearEntities ["AllVehicles",25]) == 0;
-//_loot =    "";
-//_array =    [];
+_position =    _this select 0;
+_loc 	  = 	_this select 1;
+_locTxt   = 	_this select 2;
+_radius   = 	_this select 3;
+
 _unitTypes = [];
 _agent =    objNull;
 
@@ -15,35 +12,26 @@ if ((dayz_maxCurrentZeds - sleepingZeds) > dayz_maxZeds) exitwith {};
 if ((dayz_CurrentZombies - sleepingZeds) > dayz_maxGlobalZombies) exitwith {}; 
 if ((dayz_spawnZombies - sleepingZeds) > dayz_maxLocalZombies) exitwith {}; 
 
-//Exit if a player is nearby
-if (!_isNoone) exitWith {};
-//if (count _unitTypes == 0) then {
-    _unitTypes =    []+ getArray (configFile >> "CfgBuildingLoot" >> "Default" >> "zombieClass");//this might be slowing shit down
-//};
+_unitTypes =    []+ getArray (configFile >> "CfgBuildingLoot" >> "Default" >> "zombieClass");
 _type = _unitTypes call BIS_fnc_selectRandom;
  
 //Create the Group and populate it
+if (isNil "_radius") then {
+	_radius = 200;
+};
 
-_method = "CAN_COLLIDE";
-//if (_doLoiter) then {
-	//_radius = 50;
-//	_method = "NONE";
-//};
 _agent = createAgent [_type, _position, [], _radius, _method];
 diag_log format ["MMMYUM: ZEDSYSTEM: zombie_generate SUCCESS! | PositionAgent = %1",_position];
 
 _agent setVariable ["doLoiter",false,true];
-
-/*
-if (random 1 > 0.75) then {
-    _agent setUnitPos "DOWN";
-};
-*/
 _agent switchMove "AmovPpneMstpSnonWnonDnon_healed";      
      
 _agent setDir round(random 180); //I ADDED THIS
 _myDest = getPosATL _agent;
 _newDest = getPosATL _agent;
+
+_pos = [_position, 10, _radius, 5, 0, 20, 0] call BIS_fnc_findSafePos;
+_agent setPosATL [_pos select 0, _pos select 1, 0];
 
 _agent setVariable ["myDest",_myDest];
 _agent setVariable ["newDest",_newDest];
@@ -65,7 +53,24 @@ if (_rnd > 0.3) then {
 //    };
 };
  
-player_pendingSpawned = player_pendingSpawned + 1;
+if (count client_despawnLocs > 0) then {
+	_foundLocation = false;
+	_counter = 0;
+	{
+		if ((_x select 0) == _loc) exitWith {
+			_tempZeds = _x select 1;
+			client_despawnLocs set [_counter, [_loc, _tempZeds - 1]];
+			_foundLocation = true;
+		};
+		_counter = _counter + 1;
+	} forEach client_despawnLocs;
+
+	if (!_foundLocation) then {
+		client_despawnLocs set [(count client_despawnLocs), [_loc,-1]];
+	};
+} else {
+	client_despawnLocs set [0, [_loc,-1]];
+};
  
 //Start behavior
 //_id = [_position,_agent] execFSM "\z\AddOns\dayz_code\system\zombie_agent.fsm"; //original

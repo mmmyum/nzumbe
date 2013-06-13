@@ -438,4 +438,6 @@ if(!isDedicated) then {
 	
 	player_isKnockedDown =	false;
 	player_lastKnockedDown = time;
+	
+	client_despawnLocs = [];
 };
