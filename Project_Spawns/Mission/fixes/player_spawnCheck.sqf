@@ -17,7 +17,11 @@ if ((time - player_lastZombieDespawn) > 33) then {
 		
 		client_despawnLocs = [];
 	};
+	
+
 	player_lastZombieDespawn = time;
+
+
 } else {
 
 // Zombie Spawn
@@ -42,6 +46,7 @@ if ((time - player_lastZombieDespawn) > 33) then {
 				yum_playerCurrentLoc = "nolocation";
 			};
 			_city = yum_locations select _yum;
+			yum_playerLastCity = _city;
 			//get var and check to see if the location should spawn zeds
 			
 			_tempZedNum = _city getVariable ["numZombies", 0];

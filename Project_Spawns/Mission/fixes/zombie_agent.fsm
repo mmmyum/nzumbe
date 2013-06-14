@@ -2,7 +2,7 @@
 /*%FSM<HEAD>*/
 /*
 item0[] = {"init",0,250,-75.000000,-250.000000,25.000000,-200.000000,0.000000,"init"};
-item1[] = {"End",1,250,175.000000,-250.000000,275.000000,-200.000000,0.000000,"End"};
+item1[] = {"End",1,4346,175.000000,-250.000000,275.000000,-200.000000,0.000000,"End"};
 item2[] = {"wait",4,218,-75.000000,0.000000,25.000000,50.000000,0.000000,"wait"};
 item3[] = {"Looking_for_Targ",2,250,-75.000000,75.000000,25.000000,125.000000,0.000000,"Looking for" \n "Target"};
 item4[] = {"Not_Alive",4,218,25.000000,300.000000,125.000000,350.000000,5.000000,"Not" \n "Alive"};
@@ -52,7 +52,7 @@ item47[] = {"",7,210,471.000000,95.999977,479.000000,104.000023,0.000000,""};
 item48[] = {"",7,210,-104.000000,471.000000,-95.999992,479.000000,0.000000,""};
 item49[] = {"is_Dedicated",4,218,50.000000,-250.000000,150.000000,-200.000000,5.000000,"is" \n "Dedicated"};
 item50[] = {"Delay",4,218,175.000000,175.000000,275.000000,225.000000,0.000000,"Delay"};
-item51[] = {"Sleep_Loop",2,4346,475.000000,375.000000,575.000000,425.000000,0.000000,"Sleep" \n "Loop"};
+item51[] = {"Sleep_Loop",2,250,475.000000,375.000000,575.000000,425.000000,0.000000,"Sleep" \n "Loop"};
 item52[] = {"",7,210,-554.000000,671.000000,-546.000000,679.000000,0.000000,""};
 item53[] = {"Can_Wake",4,218,475.000000,525.000000,575.000000,575.000000,0.000000,"Can" \n "Wake"};
 item54[] = {"",7,210,-553.999939,146.000031,-546.000000,153.999985,0.000000,""};
@@ -151,8 +151,8 @@ link80[] = {62,52};
 link81[] = {63,62};
 link82[] = {64,34};
 link83[] = {65,51};
-globals[] = {25.000000,1,0,0,0,640,480,1,149,6316128,1,59.430889,724.649902,863.411133,41.782669,689,851,1};
-window[] = {0,-1,-1,-1,-1,1011,362,1832,15,1,707};
+globals[] = {25.000000,1,0,0,0,640,480,1,149,6316128,1,59.428284,724.647461,457.906433,-363.720764,689,851,1};
+window[] = {0,-1,-1,-1,-1,1021,25,1495,25,1,707};
 *//*%FSM</HEAD>*/
 class FSM
 {
@@ -212,11 +212,42 @@ class FSM
     {
       name = "End";
       init = /*%FSM<STATEINIT""">*/"if (!isDedicated) then {" \n
+       "	if (alive _agent) then {" \n
+       "" \n
+       "			_city = yum_playerLastCity;" \n
+       "			_zedCount = _city getVariable [""numZombies"", 0];" \n
+       "			" \n
+       "			if (_zedCount > 0) then {" \n
+       "				//_radius = _city getVariable [""spawnRadius"", 200];" \n
+       "				" \n
+       "				if (count client_despawnLocs > 0) then {" \n
+       "					_foundLocation = false;" \n
+       "					_counter = 0;" \n
+       "" \n
+       "					{" \n
+       "						if ((_x select 0) == _city) exitWith {" \n
+       "							_tempZeds = _x select 1;" \n
+       "							client_despawnLocs set [_counter, [_city, _tempZeds + 1]];" \n
+       "							_foundLocation = true;" \n
+       "						};" \n
+       "						_counter = _counter + 1;" \n
+       "					} forEach client_despawnLocs;" \n
+       "" \n
+       "					if (!_foundLocation) then {" \n
+       "						client_despawnLocs set [(count client_despawnLocs), [_city,1]];" \n
+       "					};" \n
+       "				} else {" \n
+       "					client_despawnLocs set [0, [_city,1]];" \n
+       "				};" \n
+       "			};" \n
+       "" \n
+       "	};" \n
        "	dayz_spawnZombies = dayz_spawnZombies - 1;" \n
        "	" \n
        "	if (!isNull _agent) then {" \n
        "		deleteVehicle _agent;" \n
        "	};" \n
+       "" \n
        "} else {" \n
        "	[_agent] call zombie_findOwner;" \n
        "};"/*%FSM</STATEINIT""">*/;
@@ -459,7 +490,9 @@ class FSM
        "" \n
        "dayz_spawnZombies = dayz_spawnZombies + 1;" \n
        "" \n
-       "_playerNullLoc = 0;"/*%FSM</STATEINIT""">*/;
+       "_playerNullLoc = 0;" \n
+       "_city = ""noloc"";" \n
+       "_zedCount = -100;"/*%FSM</STATEINIT""">*/;
       precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
       class Links
       {
@@ -742,8 +775,9 @@ class FSM
           priority = 5.000000;
           to="wait";
           precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
-          condition=/*%FSM<CONDITION""">*/"_playerNullLoc > 2"/*%FSM</CONDITION""">*/;
-          action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+          condition=/*%FSM<CONDITION""">*/"_playerNullLoc > 5"/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/"sleepingZeds = sleepingZeds - 1;" \n
+           "_waitStart = time;"/*%FSM</ACTION""">*/;
         };
         /*%FSM</LINK>*/
         /*%FSM<LINK "Noone_around">*/
@@ -850,7 +884,7 @@ class FSM
       name = "Move_Closer";
       init = /*%FSM<STATEINIT""">*/"_sleepStart = time;" \n
        "_agent execVM ""fixes\zombie_MoveCloser.sqf"";" \n
-       "_isSomeone = ({(isPlayer _x) and (alive _x) and (_agent distance _x < 200) and (_agent distance _x > 30)} count playableUnits) > 0;"/*%FSM</STATEINIT""">*/;
+       "_isSomeone = ({(isPlayer _x) and (alive _x) and (_agent distance _x < 300) and (_agent distance _x > 30)} count playableUnits) > 0;"/*%FSM</STATEINIT""">*/;
       precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
       class Links
       {
