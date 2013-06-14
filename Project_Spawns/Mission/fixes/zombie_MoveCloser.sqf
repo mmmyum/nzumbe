@@ -1,16 +1,17 @@
 //private [];
-
+/*
 _position = getPosATL player;
 _cityTypes = ["NameCityCapital","NameCity","NameVillage","NameLocal"];
 _nearestLoc = (nearestLocations [_position, _cityTypes, 800] select 0);
-
+*/
+_nearestLoc = yum_playerLoc;
 _agent = _this;
 //_returnBool = false;
 
 if (!(isNil "_nearestLoc")) then {
 	_oldLoc = _agent getVariable "originLoc";
 
-		_namedLocation = yum_locations_index find (text _nearestLoc);
+		_namedLocation = yum_locations_index find yum_playerCurrentLoc;
 
 		if (_namedLocation != -1) then {
 			_city = yum_locations select _namedLocation;

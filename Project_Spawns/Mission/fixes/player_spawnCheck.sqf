@@ -22,20 +22,25 @@ if ((time - player_lastZombieDespawn) > 33) then {
 
 // Zombie Spawn
 
-	if (sleepingZeds < 200) then {
-		//_isAir = vehicle player iskindof "Air";
-		//_inVehicle = vehicle player isKindOf "player";
-		_position = getPosATL player;
-		_radius = 200;
-		_cityTypes = ["NameCityCapital","NameCity","NameVillage","NameLocal","Airport"];
 
-		_nearestLoc = (nearestLocations [_position, _cityTypes, 800] select 0);
+	//_isAir = vehicle player iskindof "Air";
+	//_inVehicle = vehicle player isKindOf "player";
+	_position = getPosATL player;
+	_radius = 200;
+	_cityTypes = ["NameCityCapital","NameCity","NameVillage","NameLocal","Airport"];
 
-		if (!(isNull _nearestLoc)) then {
-			_name = text _nearestLoc;
+	_nearestLoc = (nearestLocations [_position, _cityTypes, 600] select 0);
+	yum_playerLoc = _nearestLoc;
+	if (!(isNil "_nearestLoc")) then {
+		_name = text _nearestLoc;
+		yum_playerCurrentLoc = _name;
+		if (sleepingZeds < 200) then {
 			//pick nearest city from array and store it in _city
 			_yum = yum_locations_index find _name;
-			if (_yum == -1) exitwith {diag_log format ["MMMYUM: ZEDSYSTEM: No Location | PlayerPos: %1",_position];};
+			if (_yum == -1) exitwith {
+				diag_log format ["MMMYUM: ZEDSYSTEM: No Location | PlayerPos: %1",_position];
+				yum_playerCurrentLoc = "nolocation";
+			};
 			_city = yum_locations select _yum;
 			//get var and check to see if the location should spawn zeds
 			
@@ -49,5 +54,7 @@ if ((time - player_lastZombieDespawn) > 33) then {
 				[_city,10,_nearestLoc,_name,_radius] spawn building_spawnZombies;//no need for this, call zombie_generate modified for city level spawning
 			};
 		};
+	} else {
+	yum_playerCurrentLoc = "nolocation"; //this is not getting executed. 
 	};
 };
