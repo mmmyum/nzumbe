@@ -1,0 +1,8 @@
+zedsystem todo
+
+tp to bifindsafepos player - but within location bounds --- not to location cause it will make them continually TP until near the player - not efficient
+increase radius values for some locations - too small
+increase max zeds generally for some locations such as airports - 
+
+much much testing to see how current system is functioning
+upload current debug scripts to isathar.
