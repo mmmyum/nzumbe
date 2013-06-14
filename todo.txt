@@ -3,6 +3,11 @@ zedsystem todo
 tp to bifindsafepos player - but within location bounds --- not to location cause it will make them continually TP until near the player - not efficient
 increase radius values for some locations - too small
 increase max zeds generally for some locations such as airports - 
+domove vs moveto vs commandmove vs move vs waypoints -- one of these we can use, somehow
+	to get the zeds to goddamn overwrite their last moveto command. 
 
 much much testing to see how current system is functioning
-upload current debug scripts to isathar.
+
+
+
+upload current debug scripts to isathar - done
