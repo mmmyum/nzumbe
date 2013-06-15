@@ -1,14 +1,18 @@
 zedsystem todo
 
 tp to bifindsafepos player - but within location bounds --- not to location cause it will make them continually TP until near the player - not efficient
-increase radius values for some locations - too small
-increase max zeds generally for some locations such as airports - 
-domove vs moveto vs commandmove vs move vs waypoints -- one of these we can use, somehow
-	to get the zeds to goddamn overwrite their last moveto command. 
-buggy very low FPS while in cherno - too many zeds moving at once, or too many zeds alive? I probably broke something.
+increase radius values for some locations - too small - done
+increase max zeds generally for some locations such as airports - kind of done
 	
 much much testing to see how current system is functioning
 
+optimize:
+-use global variable defined as _city so we can set the variable on it without doing a find in for that part in the TP script
+-bis_fnc_findASafePos - is this fast enough to use, is there something else we can do
+-tp zeds only to a position close to place, never to somewhere far - so they only get tp'd once, instead of repeating the process till close
+-drop maxsleeping zeds to 150 or less -- we shouldn't need to cache many more than that --- done set to 100
+-setpos is actually sync'd across the network, so I don't know how great this is gonna be, but it should be better
+-moveto overwrite current position to move to --- done with vector math
 
 
-upload current debug scripts to isathar - done
+changes are live on the server!

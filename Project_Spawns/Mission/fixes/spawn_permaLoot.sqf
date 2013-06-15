@@ -52,7 +52,7 @@ private ["_center","_allBldngs","_type","_config","_canLoot","_handle","_debugA"
 			};
 			case "NameLocal": {
 				_num = 100;
-				_radius = 200;
+				_radius = 400;
 				_density = 30;
 			};
 			case "Airport": {
