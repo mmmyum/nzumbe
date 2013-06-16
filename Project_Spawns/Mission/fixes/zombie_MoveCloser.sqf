@@ -19,7 +19,7 @@ if (!(isNil "_nearestLoc")) then {
 			
 			if (_zedCount > 0) then {
 				_radius = _city getVariable ["spawnRadius", 200];
-				_pos = [getPosATL player, 10, _radius, 1, 0, 30, 0] call BIS_fnc_findSafePos;
+				_pos = [getPosATL player, 30, 250, 1, 0, 30, 0] call BIS_fnc_findSafePos;
 				_agent setPosATL [_pos select 0, _pos select 1, 0];
 				
 				if (count client_despawnLocs > 0) then {
