@@ -26,11 +26,11 @@ diag_log format ["MMMYUM: ZEDSYSTEM: zombie_generate SUCCESS! | PositionAgent = 
 _agent setVariable ["doLoiter",false,true];
 _agent switchMove "AmovPpneMstpSnonWnonDnon_healed";      
      
-_agent setDir round(random 180); //I ADDED THIS
+_agent setDir round(random 270); //I ADDED THIS
 _myDest = getPosATL _agent;
 _newDest = getPosATL _agent;
 
-_pos = [_position, 10, _radius, 5, 0, 20, 0] call BIS_fnc_findSafePos;
+_pos = [_position, 10, _radius, 1, 0, 30, 0] call BIS_fnc_findSafePos;
 _agent setPosATL [_pos select 0, _pos select 1, 0];
 
 _agent setVariable ["myDest",_myDest];

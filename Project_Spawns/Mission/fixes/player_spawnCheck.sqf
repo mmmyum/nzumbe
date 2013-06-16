@@ -38,7 +38,7 @@ if ((time - player_lastZombieDespawn) > 33) then {
 	if (!(isNil "_nearestLoc")) then {
 		_name = text _nearestLoc;
 		yum_playerCurrentLoc = _name;
-		if (sleepingZeds < 200) then {
+		if (sleepingZeds < 100) then {
 			//pick nearest city from array and store it in _city
 			_yum = yum_locations_index find _name;
 			if (_yum == -1) exitwith {

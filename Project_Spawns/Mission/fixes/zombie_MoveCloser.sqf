@@ -11,15 +11,15 @@ _agent = _this;
 if (!(isNil "_nearestLoc")) then {
 	_oldLoc = _agent getVariable "originLoc";
 
-		_namedLocation = yum_locations_index find yum_playerCurrentLoc;
-
+		_namedLocation = yum_locations_index find yum_playerCurrentLoc;//we dont need this if
+		//this if won't pass if player is not near a location
 		if (_namedLocation != -1) then {
-			_city = yum_locations select _namedLocation;
+			_city = yum_locations select _namedLocation;//instead of this, use yum_playerLastCity global var - 
 			_zedCount = _city getVariable ["numZombies", 0];
 			
 			if (_zedCount > 0) then {
 				_radius = _city getVariable ["spawnRadius", 200];
-				_pos = [locationPosition _nearestLoc, 10, _radius, 5, 0, 20, 0] call BIS_fnc_findSafePos;
+				_pos = [getPosATL player, 10, _radius, 1, 0, 30, 0] call BIS_fnc_findSafePos;
 				_agent setPosATL [_pos select 0, _pos select 1, 0];
 				
 				if (count client_despawnLocs > 0) then {

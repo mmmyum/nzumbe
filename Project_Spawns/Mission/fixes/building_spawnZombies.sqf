@@ -2,7 +2,7 @@ private ["_obj","_unitTypes","_num","_position","_nLoc"];
 
 if (dayz_maxCurrentZeds > dayz_maxZeds) exitwith {};
 if ((dayz_spawnZombies - sleepingZeds) > dayz_maxLocalZombies) exitwith {}; 
-if (sleepingZeds > 200) exitWith {};
+if (sleepingZeds > 100) exitWith {};
 
 _obj = 			_this select 0;
 _num = 			_this select 1;
@@ -21,7 +21,7 @@ if (_num > 0) then {
 	};
 	while {_num > 0} do {
 		if ((dayz_spawnZombies - sleepingZeds) > dayz_maxLocalZombies) exitwith {};
-		if (sleepingZeds > 200) exitWith {};
+		if (sleepingZeds > 100) exitWith {};
 		[_position,_obj,_locText,_radius] call zombie_generate;
 		_num = _num - 1;
 		sleep 0.2;
