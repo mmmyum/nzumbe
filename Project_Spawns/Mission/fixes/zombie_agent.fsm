@@ -57,7 +57,7 @@ item52[] = {"",7,210,-554.000000,671.000000,-546.000000,679.000000,0.000000,""};
 item53[] = {"Can_Wake",4,218,625.000000,525.000000,725.000000,575.000000,0.000000,"Can" \n "Wake"};
 item54[] = {"",7,210,-553.999939,146.000031,-546.000000,153.999985,0.000000,""};
 item55[] = {"Time_Check",4,218,750.000000,375.000000,850.000000,425.000000,0.000000,"Time" \n "Check"};
-item56[] = {"Wake_Up",2,4346,625.000000,650.000000,725.000000,700.000000,0.000000,"Wake" \n "Up"};
+item56[] = {"Wake_Up",2,250,625.000000,650.000000,725.000000,700.000000,0.000000,"Wake" \n "Up"};
 item57[] = {"true",8,218,225.000000,650.000000,325.000000,700.000000,0.000000,"true"};
 item58[] = {"cache_or_delete",2,250,300.000000,375.000000,400.000000,425.000000,0.000000,"cache" \n "or" \n "delete"};
 item59[] = {"can_cache",4,218,450.000000,375.000000,550.000000,425.000000,0.000000,"can" \n "cache"};
@@ -65,6 +65,7 @@ item60[] = {"",7,210,45.999958,670.999939,54.000042,679.000061,0.000000,""};
 item61[] = {"nullLoc_timeout",4,218,625.000000,175.000000,725.000000,225.000000,5.000000,"nullLoc" \n "timeout"};
 item62[] = {"maxzeds_cached",4,218,50.000000,-100.000000,150.000000,-50.000000,1.000000,"maxzeds" \n "cached"};
 item63[] = {"can_t_cache",4,218,300.000000,275.000000,400.000000,325.000000,0.000000,"can't" \n "cache"};
+item64[] = {"TP_Wake",4,4314,775.000000,525.000000,875.000000,575.000000,0.000000,"TP" \n "Wake"};
 link0[] = {0,11};
 link1[] = {0,49};
 link2[] = {2,3};
@@ -134,21 +135,23 @@ link65[] = {50,34};
 link66[] = {51,53};
 link67[] = {51,55};
 link68[] = {51,61};
-link69[] = {52,54};
-link70[] = {53,56};
-link71[] = {54,24};
-link72[] = {55,51};
-link73[] = {56,57};
-link74[] = {57,60};
-link75[] = {58,59};
-link76[] = {58,63};
-link77[] = {59,51};
-link78[] = {60,52};
-link79[] = {61,34};
-link80[] = {62,25};
-link81[] = {63,34};
-globals[] = {25.000000,1,0,0,0,640,480,1,152,6316128,1,-158.299133,1055.840820,907.216248,25.173555,1254,911,1};
-window[] = {2,-1,-1,-32000,-32000,1021,25,1495,25,3,1272};
+link69[] = {51,64};
+link70[] = {52,54};
+link71[] = {53,56};
+link72[] = {54,24};
+link73[] = {55,51};
+link74[] = {56,57};
+link75[] = {57,60};
+link76[] = {58,59};
+link77[] = {58,63};
+link78[] = {59,51};
+link79[] = {60,52};
+link80[] = {61,34};
+link81[] = {62,25};
+link82[] = {63,34};
+link83[] = {64,56};
+globals[] = {25.000000,1,0,0,0,640,480,1,153,6316128,1,-136.032654,1078.108398,794.902649,-87.139313,1254,911,1};
+window[] = {2,-1,-1,-32000,-32000,1121,125,1595,125,3,1272};
 *//*%FSM</HEAD>*/
 class FSM
 {
@@ -809,13 +812,23 @@ class FSM
            "*/"/*%FSM</ACTION""">*/;
         };
         /*%FSM</LINK>*/
+        /*%FSM<LINK "TP_Wake">*/
+        class TP_Wake
+        {
+          priority = 0.000000;
+          to="Wake_Up";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/"((time - _sleepStart) > 20) and ((dayz_spawnZombies - sleepingZeds) < dayz_maxLocalZombies) and !_isSomeone"/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/"_agent execVM ""fixes\zombie_MoveCloser.sqf"";"/*%FSM</ACTION""">*/;
+        };
+        /*%FSM</LINK>*/
         /*%FSM<LINK "Can_Wake">*/
         class Can_Wake
         {
           priority = 0.000000;
           to="Wake_Up";
           precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
-          condition=/*%FSM<CONDITION""">*/"((time - _sleepStart) > 20) and _isSomeone and ((dayz_spawnZombies - sleepingZeds) < dayz_maxLocalZombies)"/*%FSM</CONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/"((time - _sleepStart) > 20) and ((dayz_spawnZombies - sleepingZeds) < dayz_maxLocalZombies) and _isSomeone"/*%FSM</CONDITION""">*/;
           action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
         };
         /*%FSM</LINK>*/
@@ -833,10 +846,10 @@ class FSM
        "" \n
        "_agent enableSimulation true;" \n
        "//_agent setPosATL [(getPosAtL _agent) select 0, (getPosAtL _agent) select 1,0];" \n
-       "_dontTP = ({(isPlayer _x) and (alive _x) and (_agent distance _x < 600) and (_agent distance _x > 30)} count playableUnits) > 0;" \n
-       "if (!_dontTP) then {" \n
-       "	_agent execVM ""fixes\zombie_MoveCloser.sqf"";" \n
-       "};" \n
+       "//_dontTP = ({(isPlayer _x) and (alive _x) and (_agent distance _x < 400) and (_agent distance _x > 5)} count playableUnits) > 0;" \n
+       "//if (!_dontTP) then {" \n
+       "//	_agent execVM ""fixes\zombie_MoveCloser.sqf"";" \n
+       "//};" \n
        "//cutText [format [(""Zed leaving sleep state... NumSleeping = %1""), sleepingZeds], ""PLAIN DOWN""];" \n
        "" \n
        "_agent switchMove """";"/*%FSM</STATEINIT""">*/;
