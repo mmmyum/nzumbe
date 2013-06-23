@@ -18,7 +18,7 @@ if (r_player_unconscious && _vehicle == player && _type == "zombie") then {
 		_move = "Dog_Attack";
 	};
 };
-_dir = [_unit,player] call BIS_Fnc_dirTo;
+_dir = [_unit,_vehicle] call BIS_Fnc_dirTo;
 _unit setDir _dir;
 _unit playMove _move;
 
@@ -106,7 +106,7 @@ if (_vehicle != player) then {
 		} else { player playMove "AidlPpneMstpSnonWnonDnon01";};
 		*/
 		//check LOS
-		private[];
+		//private[];
 		_tPos = (getPosASL _vehicle);
 		_zPos = (getPosASL _unit);
 		_inAngle = [_zPos,(getdir _unit),50,_tPos] call fnc_inAngleSector;

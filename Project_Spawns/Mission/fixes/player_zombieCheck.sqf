@@ -8,11 +8,11 @@ _attacked = false;
 //Old System
 
 {
-	_continue = true;
+	//_continue = true;
 	_type = "zombie";
 	_targets = _group getVariable ["targets",[]];
 
-	if (alive _x && _continue) then {
+	if (alive _x) then {
 		private["_dist"];
 		_dist = (_x distance _refObj);
 		_group = _x;
@@ -27,7 +27,7 @@ _attacked = false;
 			_last = _x getVariable["lastAttack",0];
 			_entHeight = (getPosATL _x) select 2;
 			_delta = _pHeight - _entHeight;
-			if ( ((time - _last) > 1) and ((_delta < 1.5) and (_delta > -1.5)) ) then {
+			if ((isNil "_last") or (((time - _last) > 1) and ((_delta < 1.5) and (_delta > -1.5))) ) then {
 				zedattack = [_x, _type] spawn player_zombieAttack;
 				_x setVariable["lastAttack",time];
 			};
