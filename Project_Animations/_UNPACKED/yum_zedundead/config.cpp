@@ -4805,7 +4805,7 @@ class CfgMovesZombie : CfgMovesBasic {
 		class AmovPercMrunSnonWnonDf : AmovPercMstpSnonWnonDnon {
 			actions = "CivilRunActionsF";
 			file = "\yum_zedUndead\zmb\zombie_stagger";
-			speed = 0.25;
+			speed = 0.35;
 			soundEdge[] = {0.25, 0.5, 0.75, 1};
 			duty = -0.1;
 			soundOverride = "run";
@@ -4815,7 +4815,7 @@ class CfgMovesZombie : CfgMovesBasic {
 			limitGunMovement = 0.1;
 			walkcycles = 3;
 			disableWeapons = "true";
-			variantsAI[] = {"AmovPercMrunSnonWnonDfVar1", 0.8, "AmovPercMrunSnonWnonDfVar2", 0.2};
+			variantsAI[] = {"AmovPercMrunSnonWnonDfVar1", 0.7, "AmovPercMrunSnonWnonDfVar2", 0.17};
 			variantAfter[] = {3, 5, 7};
 			ConnectTo[] = {"AmovPercMsprSnonWnonDf_AmovPpneMstpSnonWnonDnon", 0.02, "AmovPercMrunSnonWnonDfVar1", 0.02, "AmovPercMrunSnonWnonDfVar2", 0.02};
 			InterpolateTo[] = {"AmovPercMrunSnonWnonDfVar1", 0.7, "AmovPercMrunSnonWnonDfVar2", 0.7, "AmovPercMstpSnonWnonDnon", 0.02, "AmovPercMwlkSnonWnonDf", 0.025, "AmovPercMsprSnonWnonDf_AmovPpneMstpSnonWnonDnon", 0.02, "CzmbAdthPercMrunSnonWnonDf", 0.01};
@@ -4824,7 +4824,7 @@ class CfgMovesZombie : CfgMovesBasic {
 		class AmovPercMrunSnonWnonDfVar1 : AmovPercMrunSnonWnonDf {
 			actions = "CivilRunActionsF";
 			file = "\yum_zedUndead\zmb\zombie_stagger";
-			speed = 0.3;
+			speed = 0.35;
 			soundEdge[] = {0.25, 0.5, 0.75, 1};
 			duty = -0.1;
 			soundOverride = "run";
@@ -4832,23 +4832,23 @@ class CfgMovesZombie : CfgMovesBasic {
 			limitGunMovement = 0.1;
 			walkcycles = 3;
 			disableWeapons = "true";
-			ConnectTo[] = {"AmovPercMrunSnonWnonDf", 0.02, "AmovPercMsprSnonWnonDf_AmovPpneMstpSnonWnonDnon", 0.02, "AmovPercMrunSnonWnonDfVar2", 0.02};
-			InterpolateTo[] = {"AmovPercMrunSnonWnonDf", 0.7, "AmovPercMrunSnonWnonDfVar2", 0.7, "AmovPercMstpSnonWnonDnon", 0.02, "AmovPercMwlkSnonWnonDf", 0.025, "AmovPercMsprSnonWnonDf_AmovPpneMstpSnonWnonDnon", 0.02, "CzmbAdthPercMrunSnonWnonDf", 0.01};
+			ConnectTo[] = {"AmovPercMrunSnonWnonDf", 0.04, "AmovPercMsprSnonWnonDf_AmovPpneMstpSnonWnonDnon", 0.02, "AmovPercMrunSnonWnonDfVar2", 0.04};
+			InterpolateTo[] = {"AmovPercMrunSnonWnonDf", 0.75, "AmovPercMrunSnonWnonDfVar2", 0.75, "AmovPercMstpSnonWnonDnon", 0.02, "AmovPercMwlkSnonWnonDf", 0.025, "AmovPercMsprSnonWnonDf_AmovPpneMstpSnonWnonDnon", 0.02, "CzmbAdthPercMrunSnonWnonDf", 0.01};
 		};
 		
 		class AmovPercMrunSnonWnonDfVar2 : AmovPercMrunSnonWnonDf {
 			actions = "CivilRunActionsF";
 			file = "\yum_zedUndead\zmb\zombie2_walk";
-			speed = 0.15;
+			speed = 0.2;
 			soundEdge[] = {0.25, 0.5, 0.75, 1};
-			duty = -0.2;
+			duty = -0.1;
 			soundOverride = "run";
 			soundEnabled = "true";
 			limitGunMovement = 0.2;
 			walkcycles = 3;
 			disableWeapons = "true";
-			ConnectTo[] = {"AmovPercMrunSnonWnonDf", 0.02, "AmovPercMsprSnonWnonDf_AmovPpneMstpSnonWnonDnon", 0.02, "AmovPercMrunSnonWnonDfVar1", 0.02};
-			InterpolateTo[] = {"AmovPercMrunSnonWnonDf", 0.7, "AmovPercMrunSnonWnonDfVar1", 0.7, "AmovPercMstpSnonWnonDnon", 0.02, "AmovPercMwlkSnonWnonDf", 0.025, "AmovPercMsprSnonWnonDf_AmovPpneMstpSnonWnonDnon", 0.02, "CzmbAdthPercMrunSnonWnonDf", 0.01};
+			ConnectTo[] = {"AmovPercMrunSnonWnonDf", 0.04, "AmovPercMsprSnonWnonDf_AmovPpneMstpSnonWnonDnon", 0.02, "AmovPercMrunSnonWnonDfVar1", 0.04};
+			InterpolateTo[] = {"AmovPercMrunSnonWnonDf", 0.75, "AmovPercMrunSnonWnonDfVar1", 0.75, "AmovPercMstpSnonWnonDnon", 0.02, "AmovPercMwlkSnonWnonDf", 0.025, "AmovPercMsprSnonWnonDf_AmovPpneMstpSnonWnonDnon", 0.02, "CzmbAdthPercMrunSnonWnonDf", 0.01};
 		};
 		
 		class AmovPknlMrunSnonWnonDf : AmovPknlMstpSnonWnonDnon {
